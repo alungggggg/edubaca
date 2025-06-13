@@ -30,7 +30,7 @@ class KelasModel extends Model
         return $this->belongsTo(SekolahModel::class, 'sekolah_id', 'id');
     }
 
-    public function siswa(): HasMany
+    public function siswa() : HasMany
     {
         return $this->hasMany(User::class, 'kelas', 'id');
     }

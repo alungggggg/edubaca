@@ -29,8 +29,8 @@ class KelasController extends Controller
 
 
             if($request->sekolah){
-                $kelas = SekolahModel::with('kelas.siswa')->get();
-                if ($kelas->isEmpty()) {
+                $kelas = SekolahModel::with('kelas.siswa.presensi')->find($request->sekolah);
+                if (!$kelas) {
                     return response()->json([
                         'success' => false,
                         'message' => 'No classes found for the specified school.'
@@ -43,7 +43,7 @@ class KelasController extends Controller
             }
 
             
-            $kelas = KelasModel::all();
+            $kelas = SekolahModel::with('kelas.siswa.presensi')->get();
 
             return response()->json([
                 'success' => true,

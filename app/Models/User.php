@@ -55,4 +55,8 @@ class User extends Authenticatable
     {
         return $this->belongsTo(KelasModel::class, 'kelas', 'id');
     }
+    public function presensi()
+    {
+        return $this->hasMany(PresensiModel::class, 'user_id', 'id');
+    }
 }

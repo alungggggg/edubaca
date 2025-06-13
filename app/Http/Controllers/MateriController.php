@@ -26,7 +26,7 @@ class MateriController extends Controller
                 ], 200);
             }
 
-            $materi = MateriModel::all();
+            $materi = MateriModel::get();
             return response()->json([
                 'success' => true,
                 'data' => $materi
