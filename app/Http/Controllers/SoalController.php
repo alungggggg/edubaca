@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class SoalController extends Controller
 {
     //
-    public function getSoal(Request $request)
+    public function index(Request $request)
     {
         try {
             $soal = [];
@@ -49,7 +49,7 @@ class SoalController extends Controller
         }
     }
 
-    public function createSoal(Request $request)
+    public function create(Request $request)
     {
         try {
             $soal = SoalModel::create($request->all());
@@ -63,10 +63,11 @@ class SoalController extends Controller
             ], 500);
         }
     }
-    public function updateSoal(Request $request, $id)
+    public function update(Request $request, $id)
     {
         try {
             $soal = SoalModel::find($id);
+             // Validate the request
             if (!$soal) {
                 return response()->json([
                     'message' => 'Soal not found',
@@ -83,7 +84,7 @@ class SoalController extends Controller
             ], 500);
         }
     }
-    public function deleteSoal($id)
+    public function delete(Request $request, $id)
     {
         try {
             $soal = SoalModel::find($id);

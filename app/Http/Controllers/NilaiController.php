@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class NilaiController extends Controller
 {
     //
-    public function getNilai(Request $request)
+    public function index(Request $request)
     {
         try {
             // Ambil berdasarkan ID Nilai
@@ -78,7 +78,7 @@ class NilaiController extends Controller
         }
     }
 
-    public function createNilai(Request $request)
+    public function create(Request $request)
     {
         $validated = $request->validate([
             'nilai' => 'required|numeric|min:0|max:100',
@@ -100,7 +100,7 @@ class NilaiController extends Controller
         }
     }
 
-    public function updateNilai(Request $request, $id)
+    public function update(Request $request, $id)
     {
         try {
             $nilai = NilaiModel::find($id);

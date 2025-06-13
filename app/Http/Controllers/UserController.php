@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    public function add(Request $request)
+    public function store(Request $request)
     {
         try{
             $validate = $request->validate([
@@ -48,7 +48,7 @@ class UserController extends Controller
                     return response()->json(['status' => true, 'data' => $user], 200);
                 }
             }
-            $users = User::with('sekolah', 'kelas')->get();
+            $users = User::with('sekolah', 'kelas')->paginate(15);
             return response()->json(['status' => true, 'data' => $users], 200);
         }catch(\Exception $e){
             return response()->json(['status' => false, 'message' => 'Error: ' . $e->getMessage()], 500);
@@ -59,8 +59,8 @@ class UserController extends Controller
         try{
             $validate = $request->validate([
                 'name' => 'required|string|max:255',
-                'username' => 'required|string|max:255|unique:users,username,' . $id,
-                'email' => 'required|string|email|max:255|unique:users,email,' . $id,
+                'username' => 'nullable|string|max:255',
+                'email' => 'nullable|string|email|max:255',
                 'password' => 'required|string|min:8|confirmed',
                 'role' => 'nullable|string|max:50',
                 'sekolah' => 'required|integer|exists:sekolah,id',

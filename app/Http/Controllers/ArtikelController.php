@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\File;
 class ArtikelController extends Controller
 {
     //
-    public function getArtikel(Request $request)
+    public function index(Request $request)
     {
         try {
             if ($request->id) {
@@ -37,7 +37,7 @@ class ArtikelController extends Controller
         }
     }
 
-    public function createArtikel(Request $request)
+    public function create(Request $request)
     {
         try {
             $gambar = $request->file('gambar');
@@ -63,7 +63,7 @@ class ArtikelController extends Controller
             ], 500);
         }
     }
-    public function updateArtikel(Request $request, $id)
+    public function update(Request $request, $id)
     {
         try {
             $data = ArtikelModel::find($id);
@@ -100,7 +100,7 @@ class ArtikelController extends Controller
             ], 500);
         }
     }
-    public function deleteArtikel($id)
+    public function delete($id)
     {
         try {
             $data = ArtikelModel::find($id);

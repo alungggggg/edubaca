@@ -27,73 +27,25 @@ use App\Http\Controllers\PerangkatMateriController;
 
 
 Route::post('/auth/sign-in', [AuthController::class, 'login']);
-// 'adminOnly'
-Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/auth/sign-out', [AuthController::class, 'logout']);
+Route::post('/auth/sign-out', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
-    Route::middleware('admin')->group(function () {
-        // kelas
-        Route::get('/kelas', [KelasController::class, 'index']);
-        Route::post('/kelas', [KelasController::class, 'create']);
-        Route::patch('/kelas/{id}', [KelasController::class, 'update']);
-        Route::delete('/kelas/{id}', [KelasController::class, 'destroy']);
+Route::middleware(['auth:sanctum', 'admin'])->group(function () {
+    Route::apiResource('user', UserController::class)->except(['show']);
+    Route::apiResource('kelas', KelasController::class)->except(['show']);
+    Route::apiResource('sekolah', SekolahController::class)->except(['show']);
+    Route::apiResource('materi', MateriController::class)->except(['show']);
+    Route::apiResource('presensi', PresensiController::class)->except(['show']);
+    Route::apiResource('artikel', ArtikelController::class)->except(['show']);
+    Route::apiResource('soal', SoalController::class)->except(['show']);
+    Route::apiResource('nilai', NilaiController::class)->except(['show']);
+    Route::apiResource('perangkat-materi', PerangkatMateriController::class)->except(['show']);
+});
 
-        // sekolah
-        Route::get('/sekolah', [SekolahController::class, 'index']);
-        Route::post('/sekolah', [SekolahController::class, 'store']);
-        Route::patch('/sekolah/{id}', [SekolahController::class, 'update']);
-        Route::delete('/sekolah/{id}', [SekolahController::class, 'destroy']);
 
-        // user
-        Route::get('/user', [UserController::class, 'index']);
-        Route::post('/user', [UserController::class, 'add']);
-        Route::patch('/user/{id}', [UserController::class, 'update']);
-        Route::delete('/user/{id}', [UserController::class, 'destroy']);
-
-        // materi
-        Route::post('/materi', [MateriController::class, 'create']);
-        Route::patch('/materi/{id}', [MateriController::class, 'update']);
-        Route::delete('/materi/{id}', [MateriController::class, 'delete']);
-
-        // presensi
-        Route::get('/presensi', [PresensiController::class, 'get']);
-        Route::post('/presensi', [PresensiController::class, 'create']);
-        Route::patch('/presensi/{id}', [PresensiController::class, 'update']);
-        Route::delete('/presensi/{id}', [PresensiController::class, 'delete']);
-
-        // perangkat materi
-        Route::get('/perangkat-materi', [PerangkatMateriController::class, 'index']);
-        Route::post('/perangkat-materi', [PerangkatMateriController::class, 'create']);
-        Route::patch('/perangkat-materi/{id}', [PerangkatMateriController::class, 'update']);
-        Route::delete('/perangkat-materi/{id}', [PerangkatMateriController::class, 'delete']);
-
-        // artikel
-        Route::post('/artikel', [ArtikelController::class, 'createArtikel']);
-        Route::patch('/artikel/{id}', [ArtikelController::class, 'updateArtikel']);
-        Route::delete('/artikel/{id}', [ArtikelController::class, 'deleteArtikel']);
-    });
-
-    // artikel
-    Route::get('/artikel', [ArtikelController::class, 'getArtikel']);
-    Route::get('/materi', [MateriController::class, 'get']);
-    
-
-    // soal
-    Route::get('/soal', [SoalController::class, 'getSoal']);
-    Route::post('/soal', [SoalController::class, 'createSoal']);
-    Route::patch('/soal/{id}', [SoalController::class, 'updateSoal']);
-    Route::delete('/soal/{id}', [SoalController::class, 'deleteSoal']);
-
-    // nilai
-    Route::get('/nilai', [NilaiController::class, 'getNilai']);
-    Route::post('/nilai', [NilaiController::class, 'createNilai']);
-    Route::patch('/nilai/{id}', [NilaiController::class, 'updateNilai']);
-    Route::delete('/nilai/{id}', [NilaiController::class, 'deleteNilai']);
-
-    // perangkat materi
-    Route::get('/materi/perangkat', [MateriController::class, 'get']);
-    Route::post('/materi/perangkat', [MateriController::class, 'create']);
-    Route::patch('/materi/perangkat/{id}', [MateriController::class, 'update']);
-    Route::delete('/materi/perangkat/{id}', [MateriController::class, 'delete']);
+Route::fallback(function (Request $request) {
+    return response()->json([
+        'message' => 'Endpoint not found',
+        'status' => false,
+    ], 404);
 });
 

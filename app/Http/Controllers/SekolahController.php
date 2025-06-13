@@ -10,7 +10,7 @@ class SekolahController extends Controller
 
     public function index(){
         try{
-            $sekolah = SekolahModel::with("kelas")->get();
+            $sekolah = SekolahModel::with("kelas")->paginate(15);
             return response()->json([
                 'success' => true,
                 'data' => $sekolah
@@ -74,9 +74,7 @@ class SekolahController extends Controller
     {
         try {
             $sekolah = SekolahModel::findOrFail($id);
-
             $sekolah->delete();
-
             return response()->json([
                 'success' => true,
                 'message' => 'Sekolah deleted successfully'

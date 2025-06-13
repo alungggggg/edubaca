@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class adminOnly
 {
@@ -21,11 +22,17 @@ class adminOnly
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public function handle(Request $request, Closure $next): Response|RedirectResponse
+    public function handle(Request $request, Closure $next): Response|\Illuminate\Http\JsonResponse
     {
-        // if ($request->user("role") !== 'admin') {
-        //     return response('Unauthorized', 403);
-        // }
+        // Cek apakah user login dan punya role admin
+        if (!auth()->check() || auth()->user()->role !== 'ADMIN') {
+            throw new HttpResponseException(
+                response()->json([
+                    'status' => false,
+                    'message' => 'Access forbidden: Admins only.',
+                ], 403)
+            );
+        }
 
         return $next($request);
     }

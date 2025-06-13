@@ -9,7 +9,7 @@ use App\Models\PresensiModel;
 class PresensiController extends Controller
 {
     //
-    public function get(Request $request)
+    public function index(Request $request)
     {
         try {
             if ($request->id) {

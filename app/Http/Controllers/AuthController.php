@@ -8,7 +8,17 @@ use Illuminate\Support\Facades\Auth;
 class AuthController extends Controller
 {
     public function login(Request $request){
-        $credentials = $request->only('username', 'password');
+    $request->validate([
+        'EmailOrUsername' => 'required|string',
+        'password' => 'required|string',
+    ]);
+
+    $loginField = filter_var($request->EmailOrUsername, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+    $credentials = [
+        $loginField => $request->EmailOrUsername,
+        'password' => $request->password,
+    ];
+
         if (Auth::attempt($credentials)) {
             $userData["token"] = $request
                 ->user()
@@ -16,7 +26,7 @@ class AuthController extends Controller
             $userData["name"] = $request->user()->name;
             return response()->json(['status' => true, "data" => $userData], 200);
         }
-        return response()->json(['message' => 'Unauthorized'], 401);
+        return response()->json(["status" => false, 'message' => 'Bad Request'], 400);
     }
 
     public function logout(Request $request){
