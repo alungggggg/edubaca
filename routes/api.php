@@ -26,8 +26,13 @@ use App\Http\Controllers\PerangkatMateriController;
 
 
 
-Route::post('/auth/sign-in', [AuthController::class, 'login']);
-Route::post('/auth/sign-out', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+Route::post('/auth/sign-in', [AuthController::class, 'login'])->name('auth.sign-in');
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/auth/sign-out', [AuthController::class, 'logout']);
+    Route::get('/auth/profile',[AuthController::class, 'profile']);
+    Route::post('/auth/update-profile', [AuthController::class, 'updateProfile']);
+    Route::post('/auth/change-password', [AuthController::class, 'changePassword']);
+});
 
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::apiResource('user', UserController::class)->except(['show']);
