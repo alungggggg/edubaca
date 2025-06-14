@@ -49,7 +49,7 @@ class SoalController extends Controller
         }
     }
 
-    public function create(Request $request)
+    public function store(Request $request)
     {
         try {
             $soal = SoalModel::create($request->all());
@@ -84,7 +84,7 @@ class SoalController extends Controller
             ], 500);
         }
     }
-    public function delete(Request $request, $id)
+    public function destroy($id)
     {
         try {
             $soal = SoalModel::find($id);

@@ -35,7 +35,7 @@ class PresensiController extends Controller
                 ], 200);
             }
 
-            $presensi = PresensiModel::all();
+            $presensi = KelasModel::with(['siswa.presensi'])->get();
             return response()->json([
                 'success' => true,
                 'data' => $presensi
@@ -47,7 +47,7 @@ class PresensiController extends Controller
         }
     }
 
-    public function create(Request $request)
+    public function store(Request $request)
     {
         try {
             $request->validate([
@@ -105,7 +105,7 @@ class PresensiController extends Controller
             ], 500);
         }
     }
-    public function delete($id)
+    public function destroy($id)
     {
         try {
             $presensi = PresensiModel::find($id);

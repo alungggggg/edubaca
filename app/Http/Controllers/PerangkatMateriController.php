@@ -39,7 +39,7 @@ class PerangkatMateriController extends Controller
         }
     }
 
-    public function create(Request $request)
+    public function store(Request $request)
     {
         try {
             $request->validate([
@@ -114,7 +114,7 @@ class PerangkatMateriController extends Controller
             ], 500);
         }
     }
-    public function delete($id)
+    public function destroy($id)
     {
         try {
             $materi = PerangkatMateriModel::find($id);

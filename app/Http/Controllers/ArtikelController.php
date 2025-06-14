@@ -37,10 +37,10 @@ class ArtikelController extends Controller
         }
     }
 
-    public function create(Request $request)
+    public function store(Request $request)
     {
         try {
-            $gambar = $request->file('gambar');
+            $gambar = $request->file('image');
             $destinationPath = 'artikel/';
             $profileImage = date('YmdHis') . "." . $gambar->getClientOriginalExtension();
             $gambar->move($destinationPath, $profileImage);
@@ -100,7 +100,7 @@ class ArtikelController extends Controller
             ], 500);
         }
     }
-    public function delete($id)
+    public function destroy($id)
     {
         try {
             $data = ArtikelModel::find($id);

@@ -16,9 +16,9 @@ class UserController extends Controller
                 'username' => 'required|string|max:255|unique:users,username',
                 'email' => 'required|string|email|max:255|unique:users,email',
                 'password' => 'required|string|min:8|confirmed',
-                'role' => 'nullable|string|max:50',
-                'sekolah' => 'nullable|integer|exists:sekolah,id',
-                'kelas' => 'nullable|integer|exists:kelas,id',
+                'role' => 'required|string|max:50',
+                'sekolah' => 'required|integer|exists:sekolah,id',
+                'kelas' => 'required|integer|exists:kelas,id',
             ]);
             if ($validate) {
                 $user = new User();

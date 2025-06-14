@@ -78,7 +78,7 @@ class NilaiController extends Controller
         }
     }
 
-    public function create(Request $request)
+    public function store(Request $request)
     {
         $validated = $request->validate([
             'nilai' => 'required|numeric|min:0|max:100',
@@ -120,7 +120,7 @@ class NilaiController extends Controller
             ], 500);
         }
     }
-    public function deleteNilai($id)
+    public function destroy($id)
     {
         try {
             $nilai = NilaiModel::find($id);

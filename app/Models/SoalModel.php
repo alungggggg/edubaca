@@ -21,7 +21,6 @@ class SoalModel extends Model
         'opsi_d',
         'opsi_e',
         'jawaban',
-        'id_artikel',
         'score',
     ];
     public function artikel(): BelongsTo

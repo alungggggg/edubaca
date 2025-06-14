@@ -57,7 +57,7 @@ class KelasController extends Controller
         }
     }
 
-    public function create(Request $request)
+    public function store(Request $request)
     {
         try {
             $request->validate([

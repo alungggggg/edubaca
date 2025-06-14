@@ -26,12 +26,16 @@ use App\Http\Controllers\PerangkatMateriController;
 
 
 
-Route::post('/auth/sign-in', [AuthController::class, 'login'])->name('auth.sign-in');
+Route::post('/auth/sign-in', [AuthController::class, 'login'])->name('auth.sign-in')->middleware('throttle:5,1');
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::get('/auth/sign-out', [AuthController::class, 'logout']);
+    Route::delete('/auth/sign-out', [AuthController::class, 'logout']);
     Route::get('/auth/profile',[AuthController::class, 'profile']);
-    Route::post('/auth/update-profile', [AuthController::class, 'updateProfile']);
-    Route::post('/auth/change-password', [AuthController::class, 'changePassword']);
+    Route::patch('/auth/update-profile', [AuthController::class, 'updateProfile']);
+    Route::patch('/auth/change-password', [AuthController::class, 'changePassword']);
+
+    Route::apiResource('artikel', ArtikelController::class)->only(['index']);
+    Route::apiResource('soal', SoalController::class)->only(['index']);
+    Route::apiResource('nilai', NilaiController::class)->only(['index', "add"]);
 });
 
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
@@ -40,14 +44,14 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::apiResource('sekolah', SekolahController::class)->except(['show']);
     Route::apiResource('materi', MateriController::class)->except(['show']);
     Route::apiResource('presensi', PresensiController::class)->except(['show']);
-    Route::apiResource('artikel', ArtikelController::class)->except(['show']);
-    Route::apiResource('soal', SoalController::class)->except(['show']);
-    Route::apiResource('nilai', NilaiController::class)->except(['show']);
     Route::apiResource('perangkat-materi', PerangkatMateriController::class)->except(['show']);
+    Route::apiResource('artikel', ArtikelController::class)->except(['index']);
+    Route::apiResource('soal', SoalController::class)->except(['index']);
+    Route::apiResource('nilai', NilaiController::class)->except(['show']);
 });
 
 
-Route::fallback(function (Request $request) {
+Route::fallback(function () {
     return response()->json([
         'message' => 'Endpoint not found',
         'status' => false,

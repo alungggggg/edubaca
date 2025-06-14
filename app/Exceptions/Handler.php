@@ -2,11 +2,23 @@
 
 namespace App\Exceptions;
 
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 
 class Handler extends ExceptionHandler
 {
+    public function render($request, Throwable $exception)
+    {
+        if ($exception instanceof TooManyRequestsHttpException) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Terlalu banyak permintaan, coba lagi dalam beberapa saat.',
+            ], 429);
+        }
+
+        return parent::render($request, $exception);
+    }
     /**
      * A list of exception types with their corresponding custom log levels.
      *

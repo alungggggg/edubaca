@@ -11,6 +11,7 @@ class AuthController extends Controller
 {
     public function login(Request $request){
         try{
+
             $request->validate([
                 'EmailOrUsername' => 'required|string',
                 'password' => 'required|string',
@@ -42,7 +43,10 @@ class AuthController extends Controller
             if ($user && method_exists($user, 'tokens')) {
                 $user->tokens()->delete();
             }
-            return response()->json(['message' => 'Logged out'], 200);
+            return response()->json([
+                'status' => true,
+                'message' => 'Berhasil logout'
+            ], 200);
 
         }catch(\Exception $e){
             return response()->json(['status' => false, 'message' => 'Error: ' . $e->getMessage()], 500);
