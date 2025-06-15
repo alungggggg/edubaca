@@ -19,7 +19,6 @@ class KelasModel extends Model
     ];
 
     protected $hidden = [
-        'id',
         'sekolah_id'
     ];
 
