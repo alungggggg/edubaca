@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\KelasModel;
+use App\Models\SekolahModel;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -55,9 +57,10 @@ class AuthController extends Controller
 
     public function profile(Request $request){
         try{
+            $profile= User::with(['sekolah', 'kelas'])->find($request->user()->id);
             return response()->json([
                 'status' => true,
-                'data' => $request->user()->with(['sekolah', 'kelas'])->get()
+                'data' => $profile
             ], 200);
         }catch(\Exception $e){
             return response()->json(['status' => false, 'message' => 'Error: ' . $e->getMessage()], 500);
