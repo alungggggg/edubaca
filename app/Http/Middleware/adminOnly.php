@@ -24,8 +24,7 @@ class adminOnly
      */
     public function handle(Request $request, Closure $next): Response|\Illuminate\Http\JsonResponse
     {
-        // Cek apakah user login dan punya role admin
-        if (!auth()->check() || auth()->user()->role !== 'ADMIN') {
+        if (auth()->user()->role != 'ADMIN') {
             throw new HttpResponseException(
                 response()->json([
                     'status' => false,
@@ -33,6 +32,7 @@ class adminOnly
                 ], 403)
             );
         }
+        // auth()->user()
 
         return $next($request);
     }

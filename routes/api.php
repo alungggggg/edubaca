@@ -35,7 +35,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::apiResource('artikel', ArtikelController::class)->only(['index']);
     Route::apiResource('soal', SoalController::class)->only(['index']);
-    Route::apiResource('nilai', NilaiController::class)->only(['index', "add"]);
+    Route::apiResource('nilai', NilaiController::class)->only(['index', "store"]);
 });
 
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
@@ -47,7 +47,7 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::apiResource('perangkat-materi', PerangkatMateriController::class)->except(['show']);
     Route::apiResource('artikel', ArtikelController::class)->except(['index']);
     Route::apiResource('soal', SoalController::class)->except(['index']);
-    Route::apiResource('nilai', NilaiController::class)->except(['index', 'add']);
+    Route::apiResource('nilai', NilaiController::class)->except(['index', 'store']);
 });
 
 
