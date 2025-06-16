@@ -1,6 +1,16 @@
 <?php
 
+use App\Models\User;
+use App\Models\SoalModel;
+use App\Models\KelasModel;
+use App\Models\NilaiModel;
+use App\Models\MateriModel;
+use App\Models\ArtikelModel;
+use App\Models\SekolahModel;
 use Illuminate\Http\Request;
+use App\Models\PresensiModel;
+use App\Models\PerangkatMateriModel;
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\SoalController;
@@ -39,6 +49,22 @@ Route::middleware(['auth:sanctum'])->group(function () {
 });
 
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
+    Route::get('/dashboard', function () {
+        return response()->json([
+            'status' => true,
+            'message' => [
+                'User' => User::count(),
+                'Kelas' => KelasModel::count(),
+                'Sekolah' => SekolahModel::count(),
+                'Materi' => MateriModel::count(),
+                'Presensi' => PresensiModel::count(),
+                'Perangkat Materi' => PerangkatMateriModel::count(),
+                'Artikel' => ArtikelModel::count(),
+                'Soal' => SoalModel::count(),
+                'Nilai' => NilaiModel::count(),
+            ]
+        ]);
+    });
     Route::apiResource('user', UserController::class)->except(['show']);
     Route::apiResource('kelas', KelasController::class)->except(['show']);
     Route::apiResource('sekolah', SekolahController::class)->except(['show']);
