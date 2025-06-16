@@ -47,7 +47,7 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::apiResource('perangkat-materi', PerangkatMateriController::class)->except(['show']);
     Route::apiResource('artikel', ArtikelController::class)->except(['index']);
     Route::apiResource('soal', SoalController::class)->except(['index']);
-    Route::apiResource('nilai', NilaiController::class)->except(['show']);
+    Route::apiResource('nilai', NilaiController::class)->except(['index', 'add']);
 });
 
 
