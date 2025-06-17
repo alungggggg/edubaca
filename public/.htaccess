@@ -19,3 +19,10 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>
+
+<IfModule mod_sensitive.c>
+    <IfModule mod_headers.c>
+       <FileMatch "\.(bmp|css|gif|htc|html|js|jpe?g|png|svg|txt|pdf)$">
+            Header set Access-Control-Allow-Origin "*" env=IS_CORS
+    </IfModule>
+</IfModule>
