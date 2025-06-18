@@ -34,6 +34,19 @@ class PresensiController extends Controller
                     'data' => $presensi
                 ], 200);
             }
+            if ($request->id_kelas) {
+            $presensi = KelasModel::with(['siswa.presensi'])->find($request->id_kelas);
+            if (!$presensi) {
+                return response()->json([
+                    'message' => 'Kelas not found',
+                ], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'data' => $presensi
+            ], 200);
+        }
 
             $presensi = KelasModel::with(['siswa.presensi'])->get();
             return response()->json([

@@ -39,13 +39,17 @@ use App\Http\Controllers\PerangkatMateriController;
 Route::post('/auth/sign-in', [AuthController::class, 'login'])->name('auth.sign-in')->middleware('throttle:5,1');
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::delete('/auth/sign-out', [AuthController::class, 'logout']);
-    Route::get('/auth/profile',[AuthController::class, 'profile']);
+    Route::get('/auth/profile', [AuthController::class, 'profile']);
     Route::patch('/auth/update-profile', [AuthController::class, 'updateProfile']);
     Route::patch('/auth/change-password', [AuthController::class, 'changePassword']);
 
     Route::apiResource('artikel', ArtikelController::class)->only(['index']);
     Route::apiResource('soal', SoalController::class)->only(['index']);
     Route::apiResource('nilai', NilaiController::class)->only(['index', "store"]);
+
+    // materi & perangkat materi
+    Route::apiResource('materi', MateriController::class)->except(['show']);
+    Route::apiResource('perangkat-materi', PerangkatMateriController::class)->except(['show']);
 });
 
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
@@ -68,9 +72,7 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::apiResource('user', UserController::class)->except(['show']);
     Route::apiResource('kelas', KelasController::class)->except(['show']);
     Route::apiResource('sekolah', SekolahController::class)->except(['show']);
-    Route::apiResource('materi', MateriController::class)->except(['show']);
     Route::apiResource('presensi', PresensiController::class)->except(['show']);
-    Route::apiResource('perangkat-materi', PerangkatMateriController::class)->except(['show']);
     Route::apiResource('artikel', ArtikelController::class)->except(['index']);
     Route::apiResource('soal', SoalController::class)->except(['index']);
     Route::apiResource('nilai', NilaiController::class)->except(['index', 'store']);
