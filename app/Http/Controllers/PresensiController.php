@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\KelasModel;
 use Illuminate\Http\Request;
 use App\Models\PresensiModel;
+use Illuminate\Support\Facades\Validator;
 
 class PresensiController extends Controller
 {
@@ -24,29 +25,54 @@ class PresensiController extends Controller
                     'data' => $presensi
                 ], 200);
             }
+
+            if($request->id_user && $request->id_kelas){
+                $presensi = PresensiModel::where('user_id', $request->id_user)->get();
+
+                return response()->json([
+                    'success' => true,
+                    'data' => $presensi,
+                ], 200);
+            }
             if ($request->kelas && $request->tanggal) {
                 $presensi = KelasModel::with(['siswa.presensi' => function ($query) use ($request) {
                     $query->where('tanggal', $request->tanggal);
                 }])->find($request->kelas);
+
+                if ($presensi) {
+                    $presensi->siswa = $presensi->siswa->map(function ($siswa) use ($request) {
+                        // Assign ulang presensi dengan filter yang ketat
+                        $filteredPresensi = $siswa->presensi->filter(function ($item) use ($request) {
+                            return $item->tanggal === $request->tanggal;
+                        })->values(); // reset index ke 0,1,2
+
+                        $siswa->setRelation('presensi', $filteredPresensi); // ini penting
+                        return $siswa;
+                    });
+                }
 
                 return response()->json([
                     'success' => true,
                     'data' => $presensi
                 ], 200);
             }
+
+
             if ($request->id_kelas) {
-            $presensi = KelasModel::with(['siswa.presensi'])->find($request->id_kelas);
-            if (!$presensi) {
+                $presensi = KelasModel::with(['siswa.presensi'])->find($request->id_kelas);
+                if (!$presensi) {
+                    return response()->json([
+                        'message' => 'Kelas not found',
+                    ], 404);
+                }
+
                 return response()->json([
-                    'message' => 'Kelas not found',
-                ], 404);
+                    'success' => true,
+                    'data' => $presensi
+                ], 200);
             }
 
-            return response()->json([
-                'success' => true,
-                'data' => $presensi
-            ], 200);
-        }
+            
 
             $presensi = KelasModel::with(['siswa.presensi'])->get();
             return response()->json([
@@ -63,24 +89,35 @@ class PresensiController extends Controller
     public function store(Request $request)
     {
         try {
-            $request->validate([
-                'user_id' => 'required|integer|exists:users,id',
-                'kelas_id' => 'required|integer|exists:kelas,id',
-                'status' => 'required|string|in:HADIR,ALPA,IZIN,SAKIT',
-                'tanggal' => 'required|date',
-            ]);
+            $data = $request->all();
 
-            $presensi = PresensiModel::create([
-                'user_id' => $request->user_id,
-                'kelas_id' => $request->kelas_id,
-                'status' => $request->status,
-                'tanggal' => $request->tanggal,
-            ]);
+            if (!is_array($data)) {
+                return response()->json([
+                    'message' => 'Format data tidak valid. Harus berupa array.',
+                ], 400);
+            }
 
-            return response()->json([
-                'success' => true,
-                'data' => $presensi
-            ], 201);
+            foreach ($data as $item) {
+                $validated = Validator::make($item, [
+                    'user_id' => 'required|integer|exists:users,id',
+                    'kelas_id' => 'required|integer|exists:kelas,id',
+                    'status' => 'required|string|in:HADIR,ALPA,IZIN,SAKIT',
+                    'tanggal' => 'required|date',
+                ])->validate();
+
+                PresensiModel::updateOrCreate(
+                    [
+                        'user_id' => $validated['user_id'],
+                        'kelas_id' => $validated['kelas_id'],
+                        'tanggal' => $validated['tanggal'],
+                    ],
+                    [
+                        'status' => $validated['status'],
+                    ]
+                );
+            }
+
+            return response()->json(['message' => 'Presensi berhasil disimpan'], 201);
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Internal Server Error: ' . $e->getMessage(),

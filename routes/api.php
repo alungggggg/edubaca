@@ -43,13 +43,18 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::patch('/auth/update-profile', [AuthController::class, 'updateProfile']);
     Route::patch('/auth/change-password', [AuthController::class, 'changePassword']);
 
+    
+
     Route::apiResource('artikel', ArtikelController::class)->only(['index']);
     Route::apiResource('soal', SoalController::class)->only(['index']);
     Route::apiResource('nilai', NilaiController::class)->only(['index', "store"]);
 
-    // materi & perangkat materi
+    // materi & perangkat materi & presensi
     Route::apiResource('materi', MateriController::class)->except(['show']);
     Route::apiResource('perangkat-materi', PerangkatMateriController::class)->except(['show']);
+    
+    Route::apiResource('presensi', PresensiController::class)->only(['index']);
+
 });
 
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
@@ -72,7 +77,7 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::apiResource('user', UserController::class)->except(['show']);
     Route::apiResource('kelas', KelasController::class)->except(['show']);
     Route::apiResource('sekolah', SekolahController::class)->except(['show']);
-    Route::apiResource('presensi', PresensiController::class)->except(['show']);
+    Route::apiResource('presensi', PresensiController::class)->except(['show', 'index']);
     Route::apiResource('artikel', ArtikelController::class)->except(['index']);
     Route::apiResource('soal', SoalController::class)->except(['index']);
     Route::apiResource('nilai', NilaiController::class)->except(['index', 'store']);
