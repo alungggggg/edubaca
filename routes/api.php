@@ -53,7 +53,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('perangkat-materi', PerangkatMateriController::class)->except(['show']);
     
     Route::apiResource('presensi', PresensiController::class)->only(['index']);
-
+    Route::apiResource('bank-bacaan', BankBacaanController::class)->only(['index', 'store']);
 });
 
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
