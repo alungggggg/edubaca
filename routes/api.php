@@ -19,6 +19,7 @@ use App\Http\Controllers\KelasController;
 use App\Http\Controllers\NilaiController;
 use App\Http\Controllers\MateriController;
 use App\Http\Controllers\ArtikelController;
+use App\Http\Controllers\BankBacaanController;
 use App\Http\Controllers\SekolahController;
 use App\Http\Controllers\PresensiController;
 use App\Http\Controllers\PerangkatMateriController;
@@ -42,8 +43,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/auth/profile', [AuthController::class, 'profile']);
     Route::patch('/auth/update-profile', [AuthController::class, 'updateProfile']);
     Route::patch('/auth/change-password', [AuthController::class, 'changePassword']);
-
-    
 
     Route::apiResource('artikel', ArtikelController::class)->only(['index']);
     Route::apiResource('soal', SoalController::class)->only(['index']);
@@ -81,6 +80,7 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::apiResource('artikel', ArtikelController::class)->except(['index']);
     Route::apiResource('soal', SoalController::class)->except(['index']);
     Route::apiResource('nilai', NilaiController::class)->except(['index', 'store']);
+    Route::apiResource('bank-bacaan', BankBacaanController::class)->except(['index', 'store']);
 });
 
 
